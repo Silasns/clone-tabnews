@@ -9,16 +9,15 @@ test("GET to api/v1/status should return 200", async () => {
   const parsedUpdateAt = new Date(responseBody.update_at).toISOString();
   expect(responseBody.update_at).toBe(parsedUpdateAt);
 
-  const versionDataBase =
-    "PostgreSQL 17.4 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit";
+  const versionDataBase = "17.4";
   expect(responseBody.dependencies.database.version).toBeDefined();
   expect(responseBody.dependencies.database.version).toBe(versionDataBase);
 
-  const maxConnectionsDataBase = "100";
+  const maxConnectionsDataBase = 100;
   expect(responseBody.dependencies.database.max_connections).toBeDefined();
   expect(responseBody.dependencies.database.max_connections).toBe(
     maxConnectionsDataBase,
   );
 
-  expect(responseBody.dependencies.database.opened_connections).toBeTruthy();
+  expect(responseBody.dependencies.database.opened_connections).toEqual(1);
 });
