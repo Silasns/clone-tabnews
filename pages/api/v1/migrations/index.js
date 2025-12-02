@@ -4,6 +4,10 @@ import database from "infra/database.js";
 
 export default async function migrations(request, response) {
   const dbClient = await database.getNewClient();
+  if (request.method !== "GET" || request.method !== "POST") {
+    await dbClient.end();
+  }
+
   const defaultMigrationsOptions = {
     dbClient: dbClient,
     dryRun: true,
@@ -30,12 +34,5 @@ export default async function migrations(request, response) {
     return response.status(200).json(migratedMigrations);
   }
 
-  if (request.method === "DELETE") {
-    const pendingMigrations = await migrationRunner(defaultMigrationsOptions);
-    await dbClient.end();
-    return response.status(200).json(pendingMigrations);
-  }
-
-  //await dbClient.end();
   return response.status(405).end();
 }
