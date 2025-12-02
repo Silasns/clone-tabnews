@@ -36,17 +36,6 @@ export default async function migrations(request, response) {
     return response.status(200).json(pendingMigrations);
   }
 
-  if (request.method === "PUT") {
-    const pendingMigrations = await migrationRunner(defaultMigrationsOptions);
-    await dbClient.end();
-    return response.status(200).json(pendingMigrations);
-  }
-
-  if (request.method === "PATCH") {
-    const pendingMigrations = await migrationRunner(defaultMigrationsOptions);
-    await dbClient.end();
-    return response.status(200).json(pendingMigrations);
-  }
-
+  await dbClient.end();
   return response.status(405).end();
 }
